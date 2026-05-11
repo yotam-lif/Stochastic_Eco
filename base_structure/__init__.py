@@ -1,5 +1,5 @@
 """
-stochastic_eco: Generalized Lotka-Volterra dynamics with stochasticity.
+base_structure: Generalized Lotka-Volterra dynamics with stochasticity.
 
 Implements the model from Bunin (2017), Phys. Rev. E 95, 042414.
 """

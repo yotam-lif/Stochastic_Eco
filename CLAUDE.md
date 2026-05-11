@@ -50,27 +50,27 @@ dN_i/dt = (r_i/K_i) * N_i * (K_i - N_i - Σ_{j≠i} α_ij N_j)
 ## Typical workflow for a figure script
 
 ```python
-from stochastic_eco import GLVModel
-from stochastic_eco.analysis import pca_trajectory, linear_noise_approximation, build_diffusion_matrix
-from stochastic_eco.cavity import abundance_distribution, phase_boundary_ufp_ma
+from base_structure import GLVModel
+from base_structure.analysis import pca_trajectory, linear_noise_approximation, build_diffusion_matrix
+from base_structure.cavity import abundance_distribution, phase_boundary_ufp_ma
 import numpy as np
 
 # 1. Set up model (in SFP regime: small sigma, moderate mu)
 model = GLVModel(S=200, mu=4.0, sigma=1.0, gamma=0.0, sigma_K=0.0, seed=42)
 
 # 2. Find deterministic fixed point
-fp = model.find_fixed_point(t_max=3000)   # fp.surviving gives survivor indices
+fp = model.find_fixed_point(t_max=3000)  # fp.surviving gives survivor indices
 
 # 3. Linearize around FP
-eig = model.eigendecomposition(fp)        # eig.eigenvalues, eig.max_real_part
+eig = model.eigendecomposition(fp)  # eig.eigenvalues, eig.max_real_part
 M_star = model.community_matrix(fp)
 
 # 4. Cavity prediction (analytical)
-cav = model.cavity_solve()               # cav.phi, cav.mean_N, cav.var_N
+cav = model.cavity_solve()  # cav.phi, cav.mean_N, cav.var_N
 
 # 5. Stochastic dynamics
 sde = model.integrate_sde(N0=fp.N_star, t_span=(0, 1000), dt=0.005,
-                            D=0.01, noise_type="demographic", save_every=20)
+                          D=0.01, noise_type="demographic", save_every=20)
 # sde.N shape: (S, n_saved); sde.t shape: (n_saved,)
 
 # 6. PCA of fluctuations
